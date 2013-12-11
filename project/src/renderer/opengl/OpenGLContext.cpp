@@ -132,7 +132,7 @@ namespace lime {
 		
 		if (r == Rect (mWidth, mHeight)) {
 			
-			glClearColor ((GLclampf)(((inColour >> 16) & 0xff) / 255.0), (GLclampf)(((inColour >> 8) & 0xff) / 255.0), (GLclampf)(((inColour) & 0xff) / 255.0), (GLclampf)1.0);
+			glClearColor ((GLclampf)0.0, (GLclampf)0.0, (GLclampf)0.0, (GLclampf)0.0);
 			glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 			
 		} else {
@@ -141,7 +141,7 @@ namespace lime {
 			
 			// TODO: Clear with a rect
 			// TODO: Need replacement call for GLES2
-			glColor4f ((GLclampf)(((inColour >> 16) & 0xff) / 255.0), (GLclampf)(((inColour >> 8) & 0xff) / 255.0), (GLclampf)(((inColour) & 0xff) / 255.0), (GLclampf)1.0);
+			glColor4f ((GLclampf)0.0, (GLclampf)0.0, (GLclampf)0.0, (GLclampf)0.0);
 			
 			glMatrixMode (GL_MODELVIEW);
 			glPushMatrix ();
