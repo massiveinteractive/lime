@@ -10,6 +10,15 @@
 #define snprintf _snprintf
 #endif
 
+#ifdef ANDROID
+#include <android/log.h>
+#endif
+
+#ifdef ANDROID
+#define LOG_TAG "shoeboxlime"
+#define ALOG(...) __android_log_print(ANDROID_LOG_INFO,LOG_TAG,__VA_ARGS__)
+#endif
+
 /**
  * TODO:
  * HTTP redirects
@@ -53,7 +62,7 @@ public:
 
 	CURLLoader(URLRequest &r)
 	{
-		mState = urlInit;
+    mState = urlInit;
 		if (!sCurlM)
 			sCurlM = curl_multi_init();
 		mBytesTotal = -1;
@@ -158,7 +167,15 @@ public:
  
     /* some servers don't like requests that are made without a user-agent
       field, so we provide one */ 
-    curl_easy_setopt(mHandle, CURLOPT_USERAGENT, "libcurl-agent/1.0");
+    if(r.userAgent != NULL && r.userAgent != "")
+    {
+      ALOG("apply user agent %s",r.userAgent);
+      curl_easy_setopt(mHandle, CURLOPT_USERAGENT, r.userAgent);
+    }
+    else
+    {
+      curl_easy_setopt(mHandle, CURLOPT_USERAGENT, "libcurl-agent/1.0");
+    }
 
 		mState = urlLoading;
 

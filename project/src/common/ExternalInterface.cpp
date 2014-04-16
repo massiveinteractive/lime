@@ -119,6 +119,7 @@ static int _id_method;
 static int _id_requestHeaders;
 static int _id_name;
 static int _id_contentType;
+static int _id_userAgent;
 static int _id___bytes;
 
 static int _id_rect;
@@ -211,6 +212,7 @@ extern "C" void InitIDs()
    _id_requestHeaders = val_id("requestHeaders");
    _id_name = val_id("name");
    _id_contentType = val_id("contentType");
+   _id_userAgent = val_id("userAgent");
    _id___bytes = val_id("__bytes");
    _id_rect = val_id("rect");
    _id_matrix = val_id("matrix");
@@ -568,6 +570,7 @@ void FromValue(value obj, URLRequest &request)
    request.cookies = val_string( val_field(obj, _id_cookieString) );
    request.method = val_string( val_field(obj, _id_method) );
    request.contentType = val_string( val_field(obj, _id_contentType) );
+   request.userAgent = val_string( val_field(obj, _id_userAgent) );
    request.debug = val_field_numeric( obj, _id_verbose );
    request.postData = ByteArray( val_field(obj,_id___bytes) );
 

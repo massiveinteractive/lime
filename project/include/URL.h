@@ -34,6 +34,7 @@ struct URLRequest
    const char *cookies;
    const char *method;
    const char *contentType;
+   const char *userAgent;
    ByteArray  postData;
    bool       debug;
    QuickVec<URLRequestHeader> headers; 
