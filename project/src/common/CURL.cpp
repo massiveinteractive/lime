@@ -158,7 +158,7 @@ public:
  
     /* some servers don't like requests that are made without a user-agent
       field, so we provide one */ 
-    if(r.userAgent != NULL && r.userAgent != "")
+    if(r.userAgent != NULL && strlen(r.userAgent) != 0)
     {
       curl_easy_setopt(mHandle, CURLOPT_USERAGENT, r.userAgent);
     }
