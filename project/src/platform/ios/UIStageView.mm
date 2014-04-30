@@ -1054,6 +1054,7 @@ public:
       case 126: return keyBACKQUOTE;
       default: return asciiCode;
    }
+}
 
 /* UITextFieldDelegate method.  Invoked when user types something. */
 
