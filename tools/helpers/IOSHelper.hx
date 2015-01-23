@@ -208,9 +208,35 @@ class IOSHelper {
 			var templatePaths = [ PathHelper.combine (PathHelper.getHaxelib (new Haxelib ("lime")), "templates") ].concat (project.templatePaths);
 			var launcher = PathHelper.findTemplate (templatePaths, "bin/ios-sim");
 			Sys.command ("chmod", [ "+x", launcher ]);
-			
-			ProcessHelper.runCommand ("", launcher, [ "launch", FileSystem.fullPath (applicationPath), /*"--sdk", project.environment.get ("IPHONE_VER"), "--family", family,*/ "--timeout", "60" ] );
-			
+
+			var args = ["launch", FileSystem.fullPath (applicationPath)/*"--sdk", project.environment.get ("IPHONE_VER"), "--family", family,*/];// "--timeout", "60"];
+			var IOS_SIM_PREFIX = "iosSim_";
+
+			for (def in project.haxedefs.keys()) {
+
+				if (def.indexOf(IOS_SIM_PREFIX) == 0) {
+
+					var parts = def.split("_");
+					parts.shift();
+					args.push("--" + parts.shift());
+
+					if (parts.length > 0) {
+
+						args.push(parts.join("_"));
+
+					}
+				}
+			}
+
+			if (args.indexOf("--timeout") == -1) {
+
+				args.push("--timeout");
+				args.push("60");
+
+			}
+
+			ProcessHelper.runCommand ("", launcher, args);
+
 		} else {
 			
 			var applicationPath = "";
@@ -229,22 +255,49 @@ class IOSHelper {
 			var launcher = PathHelper.findTemplate (templatePaths, "bin/ios-deploy");
 			Sys.command ("chmod", [ "+x", launcher ]);
 			
-			var xcodeVersion = getXcodeVersion ();
 			
+			var args:Array<String> = ["install", "--bundle", FileSystem.fullPath (applicationPath)];
+			var IOS_DEPLOY_PREFIX = "iosDeploy_";
+
+			for (def in project.haxedefs.keys()) {
+
+				if (def.indexOf(IOS_DEPLOY_PREFIX) == 0) {
+
+					var parts = def.split("_");
+					parts.shift();
+					args.push("--" + parts.shift());
+
+					if (parts.length > 0) {
+
+						args.push(parts.join("_"));
+
+					}
+				}
+			}
+
+			if (args.indexOf("--timeout") == -1) {
+
+				args.push("--timeout");
+				args.push("5");
+
+			}
+
+			var xcodeVersion = getXcodeVersion ();
+
 			if (xcodeVersion.charAt (0) == "4") {
-				
-				ProcessHelper.runCommand ("", launcher, [ "install", "--debug", "--timeout", "5", "--bundle", FileSystem.fullPath (applicationPath) ]);
-				
+
+				args.push("--debug");
+
 			} else {
-				
+
 				// ios-deploy does not support debugging (running) installed applications with Xcode 5, since GDB was removed
-				
-				ProcessHelper.runCommand ("", launcher, [ "install", "--timeout", "5", "--bundle", FileSystem.fullPath (applicationPath) ]);
+				args.remove("--debug");
 				
 			}
-			
-		}
 		
+			ProcessHelper.runCommand ("", launcher, args);
+		}
+			
 	}
 	
 	
